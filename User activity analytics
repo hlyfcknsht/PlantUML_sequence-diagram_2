@@ -1,0 +1,27 @@
+@startuml
+box "Сбор данных" #LightGreen
+  actor "Пользователь" as user
+  participant "Веб-приложение" as app
+end box
+
+box "Обработка данных" #LightBlue
+  control "Сервис аналитики" as analytics
+  database "Логи активности" as activityLogs
+end box
+
+box "Отчетность" #LightGray
+  database "БД отчетов" as reportDb
+  participant "Личный кабинет" as dashboard
+end box
+
+user -> app: Действия на сайте
+app -> activityLogs: Запись событий
+
+loop Ежедневная обработка
+  analytics -> activityLogs: Получение данных
+  analytics -> reportDb: Генерация отчетов
+end
+
+dashboard -> reportDb: Запрос отчетов
+reportDb --> dashboard: Возврат данных
+@enduml
